@@ -75,6 +75,22 @@ Resources:
                   - "lambda:GetFunction"
                   - "lambda:ListFunctions"
                 Resource: "arn:aws:lambda:*:*:function:cis_functions*"
+        -
+          PolicyName: "read-kinesis-records"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "kinesis:GetRecords"
+                  - "kinesis:GetShardIterator"
+                  - "kinesis:DescribeStream"
+                  - "kinesis:ListStreams"
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "arn:aws:kinesis:*:*:stream/CIS*"
   #DynamoDB Stream Subscriber for Identity Drivers
   IDVtoIDMDriver:
     Type: "AWS::IAM::Role"

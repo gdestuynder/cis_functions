@@ -4,15 +4,17 @@ import os
 import logging
 import time
 from datetime import datetime
+from logging import NullHandler
 
 
-def set_stream_logger(name="cis-validator", level=logging.INFO,
-                      format_string=None):
+def set_stream_logger(name="cis-validator", level=logging.INFO, format_string=None):
     """
+    :Stream logger class borrowed from https://github.com/threatresponse/aws_ir
     """
 
-    if format_string is None:
+    if not format_string:
         format_string = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
     time_format = "%Y-%m-%dT%H:%M:%S"
 
     logger = logging.getLogger(name)
@@ -22,9 +24,5 @@ def set_stream_logger(name="cis-validator", level=logging.INFO,
     streamFormatter = logging.Formatter(format_string, time_format)
     streamHandler.setFormatter(streamFormatter)
     logger.addHandler(streamHandler)
-
-class NullHandler(logging.Handler):
-    def emit(self, record):
-        pass
 
 logging.getLogger('cis-validator').addHandler(NullHandler())

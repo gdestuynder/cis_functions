@@ -5,10 +5,11 @@
   "role": "arn:aws:iam::656532927350:role/CISLambdaFunctionRoles-StreamValidator-12UNGHKGTAIIK",
   "environment": {
     "CIS_ARN_MASTER_KEY": "arn:aws:kms:us-west-2:656532927350:key/9e231aa0-04e4-4517-a45d-633c3bb055f0",
-    "DYNAMODB_TABLE": "CISStreamandDB-IdentityVaultUsers-AQ358T5XZNSQ"
+    "CIS_DYNAMODB_TABLE": "CISStreamandDB-IdentityVaultUsers-AQ358T5XZNSQ",
+    "CIS_KINESIS_STREAM_ARN": "arn:aws:kinesis:us-west-2:656532927350:stream/CISStreamandDB-CISInputStream-1FTGC3KE4NN9U"
   },
   "hooks":{
     "build": "pip3 install -r requirements.txt -t .",
-    "clean": "find . -d -not -name \"..\" -not -name \".\" -not -name \"*.json\" -not -name \"main.py\" -not -name \"function.*\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null && find . -type f -name \"*.py\" -name \"*.so\" -not -name \"*.json\" -not -name \"main.py\" -not -name \"function.*\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null"
+    "clean": "find . -d -not -name \"..\" -not -name \".\" -not -name \"*.json\" -not -name \"main.py\" -not -name \"function.*\" -not -name \"utils.py\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null && find . -type f -name \"*.py\" -name \"*.so\" -not -name \"*.json\" -not -name \"main.py\" -not -name \"utils.py\" -not -name \"function.*\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null && find . -type f -name \"*.py\" -name \"*.so\" -not -name \"*.json\" -not -name \"utils.py\" -not -name \"function.*\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null"
   }
 }

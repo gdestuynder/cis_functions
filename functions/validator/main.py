@@ -17,7 +17,7 @@ import os
 import utils
 
 # Import the Mozilla CIS library to facilitate core logic interaction.
-from cis import encryption, validation
+from cis import encryption, streams, validation
 
 def handle(event, context):
     """This is the main handler called during function invocation."""
@@ -33,6 +33,7 @@ def handle(event, context):
     if payload_status is True:
         logger.info("Payload is valid sending to kinesis.")
         # To-Do Write to kinesis
+        streams.publish_to_cis(data=encryption.decrypt(**event), partition_key='mozillians.org')
 
         # Call Invoke-Function to start vault stream processor.
     else:

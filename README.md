@@ -58,4 +58,9 @@ See the container project for the reasons why you'd want to use the container in
 
 2. Do business as usual.  
 
-# CI/CD pipelines (Pending)
+# CI/CD pipelines
+
+1. Commits to master branch automatically run `apex deploy -e stage`
+
+> This environment is a fully self contained version of the vault, stream, and dynamo.  However users should note that it still updates manage-dev instance of auth0.
+ 

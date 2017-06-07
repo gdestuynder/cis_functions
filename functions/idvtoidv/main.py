@@ -1,5 +1,14 @@
 """ This is the body of the lambda function """
 
 def handle(event, context):
-    """This is the main handler called during function invoke."""
-    pass
+
+    # Initialize Stream Logger
+    # Log level can be environment driven later in development.
+    log_level = logging.INFO
+    utils.set_stream_logger(level=log_level)
+    logger = logging.getLogger('cis-idvtoidv')
+    logger.info("Stream Processor initialized.")
+
+    for record in event['Records']:
+        pass
+    return None

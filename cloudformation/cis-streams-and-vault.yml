@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Mozilla Change Integration Service Stack"
+Parameters:
+  StreamProcessorARN:
+    Description: ARN of the stream processor function that sends messages to the identity vault.
+    Type: String
+    MinLength: "1"
+  VaultProcessorARN:
+    Description: ARN of the dynamodb processor sending data to authzero.
+    Type: String
+    MinLength: "1"
+Resources:
+  ### This is the stream of data flowing in from KPLs like Mozillians
+  CISInputStream:
+    Type: "AWS::Kinesis::Stream"
+    Properties:
+      ShardCount: 1
+      Tags:
+      - Key: Project
+        Value: ChangeIntegration
+      - Key: Type
+        Value: Input
+  ### DynamoDB Table of all users
+  IdentityVaultUsers:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+      -
+        AttributeName: "user_id"
+        AttributeType: "S"
+      KeySchema:
+      -
+        AttributeName: "user_id"
+        KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+  ### Groups table populated by loopback stream driver for fast search of group members
+  IdentityVaultGroups:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+      -
+        AttributeName: "group_id"
+        AttributeType: "S"
+      KeySchema:
+      -
+        AttributeName: "group_id"
+        KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
+      StreamSpecification:
+        StreamViewType: KEYS_ONLY
+  StreamtoIDVHandler:
+    Type: "AWS::Lambda::EventSourceMapping"
+    Properties:
+      BatchSize: 10
+      Enabled: True
+      EventSourceArn:
+        Fn::Join:
+          - ""
+          -
+            - "arn:aws:kinesis:"
+            -
+              Ref: "AWS::Region"
+            - ":"
+            -
+              Ref: "AWS::AccountId"
+            - ":stream/"
+            -
+              Ref: "CISInputStream"
+      FunctionName:
+        !Ref StreamProcessorARN
+      StartingPosition: LATEST
+  VaulttoAuthzeroHandler:
+    Type: "AWS::Lambda::EventSourceMapping"
+    Properties:
+      BatchSize: 10
+      Enabled: True
+      EventSourceArn:
+        Fn::GetAtt:
+          - IdentityVaultUsers
+          - StreamArn
+      FunctionName:
+        !Ref VaultProcessorARN
+      StartingPosition: LATEST

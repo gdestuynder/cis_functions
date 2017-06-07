@@ -1,0 +1,15 @@
+{
+  "runtime": "python3.6",
+  "handler": "main.handle",
+  "description": "The change integration service identity vault loopback operations.",
+  "role": "arn:aws:iam::656532927350:role/CIS-Staging-Roles-IDVtoIDV-J18MMCBMH2OH",
+    "environment": {
+    "CIS_ARN_MASTER_KEY": "",
+    "CIS_DYNAMODB_TABLE": "",
+    "CIS_KINESIS_STREAM_ARN": ""
+  },
+  "hooks":{
+    "build": "pip3 install -r requirements.txt -t .",
+    "clean": "/bin/bash clean.sh"
+  }
+}

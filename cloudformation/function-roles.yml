@@ -27,17 +27,17 @@ Resources:
                 Action: "*"
                 Resource: "arn:aws:kinesis:*:*:stream/*CISInputStream*"
         -
-          PolicyName: "invoke-other-cis-functions"
+          PolicyName: "generate-cloudwatch-logs"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               -
                 Effect: "Allow"
                 Action:
-                  - "lambda:InvokeFunction"
-                  - "lambda:GetFunction"
-                  - "lambda:ListFunctions"
-                Resource: "arn:aws:lambda:*:*:function:cis_functions*"
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
   #Stream Identity Vault KCL
   StreamToIDV:
     Type: "AWS::IAM::Role"
@@ -87,10 +87,19 @@ Resources:
                   - "kinesis:GetShardIterator"
                   - "kinesis:DescribeStream"
                   - "kinesis:ListStreams"
+                Resource: "arn:aws:kinesis:*:*:stream/CIS*"
+        -
+          PolicyName: "generate-cloudwatch-logs"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
                   - "logs:CreateLogGroup"
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
-                Resource: "arn:aws:kinesis:*:*:stream/CIS*"
+                Resource: "*"
   #DynamoDB Stream Subscriber for Identity Drivers
   IDVtoIDMDriver:
     Type: "AWS::IAM::Role"
@@ -117,17 +126,29 @@ Resources:
                 Action: "dynamodb:*"
                 Resource: "arn:aws:dynamodb:*:*:table/*IdentityVault*"
         -
-          PolicyName: "invoke-other-cis-functions"
+          PolicyName: "read-credstash-db"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               -
                 Effect: "Allow"
                 Action:
-                  - "lambda:InvokeFunction"
-                  - "lambda:GetFunction"
-                  - "lambda:ListFunctions"
-                Resource: "arn:aws:lambda:*:*:function:cis_functions*"
+                  - "dynamodb:GetItem"
+                  - "dynamodb:Query"
+                  - "dynamodb:Scan"
+                Resource: "arn:aws:dynamodb:*:*:table/credential-store"
+        -
+          PolicyName: "generate-cloudwatch-logs"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
   #DynamoDB Stream Subscriber for Group loopback driver
   IDVtoIDV:
     Type: "AWS::IAM::Role"
@@ -154,14 +175,14 @@ Resources:
                 Action: "dynamodb:*"
                 Resource: "arn:aws:dynamodb:*:*:table/*IdentityVault*"
         -
-          PolicyName: "invoke-other-cis-functions"
+          PolicyName: "generate-cloudwatch-logs"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               -
                 Effect: "Allow"
                 Action:
-                  - "lambda:InvokeFunction"
-                  - "lambda:GetFunction"
-                  - "lambda:ListFunctions"
-                Resource: "arn:aws:lambda:*:*:function:cis_functions*"
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"

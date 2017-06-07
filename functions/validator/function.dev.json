@@ -10,6 +10,6 @@
   },
   "hooks":{
     "build": "pip3 install -r requirements.txt -t .",
-    "clean": "find . -d -not -name \"..\" -not -name \".\" -not -name \"*.json\" -not -name \"main.py\" -not -name \"function.*\" -not -name \"utils.py\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null && find . -type f -name \"*.py\" -name \"*.so\" -not -name \"*.json\" -not -name \"main.py\" -not -name \"utils.py\" -not -name \"function.*\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null && find . -type f -name \"*.py\" -name \"*.so\" -not -name \"*.json\" -not -name \"utils.py\" -not -name \"function.*\" -not -name \"requirements.txt\" | xargs rm -fr &> /dev/null"
+    "clean": "/bin/bash clean.sh"
   }
 }

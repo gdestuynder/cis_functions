@@ -1,0 +1,6 @@
+Copy
+version: 0.2
+phases:
+  build:
+    commands:
+      - apex deploy -e stage 

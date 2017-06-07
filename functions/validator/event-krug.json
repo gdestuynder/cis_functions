@@ -1,31 +1,31 @@
 {
-	"user_id": "31337xxxx|unique",
+	"user_id": "email|5937288b3e5e3b718ed4eb49",
 	"timezone": "America/Los_Angeles",
 	"active": true,
 	"lastModified": "2017-03-09T21:28:51.851Z",
 	"created": "2017-03-09T21:28:51.851Z",
-	"userName": "jdoe@mozilla.com",
-	"displayName": "john doe is changed again",
-	"firstName": "john",
-	"lastName": "doe",
+	"userName": "andrewkrug+test@gmail",
+	"displayName": "Andrew Krug PWDLESS TEST",
+	"firstName": "Test",
+	"lastName": "Krug",
 	"preferredLanguage": "en_US",
-	"primaryEmail": "jdoe@mozilla.com",
+	"primaryEmail": "andrewkrug+test@gmail.com",
 	"emails": [
 		{
-			"value": "jdoe@mozilla.com",
+			"value": "andrewkrug+test@gmail.com",
 			"verified": true,
 			"primary": true,
 			"name": "work"
 		},
 		{
-			"value": "1337@mozilla.com",
+			"value": "1337@gmail",
 			"verified": true,
 			"name": "work-funny"
 		}
 	],
 	"phoneNumbers": [
 		{
-			"value": "+33169288888",
+			"value": "+8675309",
 			"verified": false,
 			"name": "My French mobile phone"
 		},
@@ -43,7 +43,7 @@
 			"name": "Blog"
 		},
 		{
-			"value": "https://mozillians.org/en-US/u/jdoe/",
+			"value": "https://mozillians.org/en-US/u/andrewkrug+test/",
 			"verified": true,
 			"name": "Mozillian profile"
 		},
@@ -55,7 +55,7 @@
 	],
 	"nicknames": [
 		{
-			"value": "jdoe",
+			"value": "andrewkrug+test",
 			"primary": true,
 			"verified": false,
 			"name": "Mozilla IRC"
@@ -106,7 +106,7 @@
 			{
 				"created": "2010-01-23T04:56:22Z",
 				"lastUsed": "2010-01-23T04:56:22Z",
-				"name": "mozdef1.private.scl3.mozilla.com",
+				"name": "mozdef1.private.scl3.gmail",
 				"uuid": "5a5munnfxYjqkaN0su1Kl7USxbqkILQN"
 			}
 		]

@@ -54,7 +54,7 @@ See the container project for the reasons why you'd want to use the container in
 
 1. Run a shell in the prepacked lambda container environment.
 
-`docker run -ti -v ~/.aws:/root/.aws -v ~/workspace/cis_functions/:/workspace mozillaiam/docker-apex:latest /bin/bash`
+`docker run --rm -ti -v ~/.aws:/root/.aws -v ~/workspace/cis_functions/:/workspace mozillaiam/docker-apex:latest /bin/bash`
 
 2. Do business as usual.  
 

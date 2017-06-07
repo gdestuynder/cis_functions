@@ -1,4 +1,5 @@
-__version__ = '0.0.1'
+
+import logging
 
 """
 The MIT License (MIT)
@@ -25,14 +26,7 @@ SOFTWARE.
 
 """
 
-import os
-import logging
-import time
-from datetime import datetime
-from logging import NullHandler
-
-
-def set_stream_logger(name="cis-validator", level=logging.INFO, format_string=None):
+def set_stream_logger(name="cis-streamtoidv", level=logging.INFO, format_string=None):
     """
     :Stream logger class borrowed from https://github.com/threatresponse/aws_ir
     """
@@ -50,4 +44,5 @@ def set_stream_logger(name="cis-validator", level=logging.INFO, format_string=No
     streamHandler.setFormatter(streamFormatter)
     logger.addHandler(streamHandler)
 
-logging.getLogger('cis-validator').addHandler(NullHandler())
+logging.getLogger('cis-streamtoidv').addHandler(logging.NullHandler())
+

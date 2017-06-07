@@ -1,4 +1,3 @@
-import os
 import logging
 
 """
@@ -27,7 +26,7 @@ SOFTWARE.
 """
 
 
-def set_stream_logger(name="cis-validator", level=logging.INFO, format_string=None):
+def set_stream_logger(name="cis-idvtoidv", level=logging.INFO, format_string=None):
     """
     :Stream logger class borrowed from https://github.com/threatresponse/aws_ir
     """
@@ -45,4 +44,4 @@ def set_stream_logger(name="cis-validator", level=logging.INFO, format_string=No
     streamHandler.setFormatter(streamFormatter)
     logger.addHandler(streamHandler)
 
-logging.getLogger('cis-validator').addHandler(logging.NullHandler())
+logging.getLogger('cis-idvtoauth0').addHandler(logging.NullHandler())

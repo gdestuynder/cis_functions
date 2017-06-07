@@ -14,3 +14,5 @@ packaging==16.8
 setuptools==35.0.2
 appdirs==1.4.3
 pyparsing==2.2.0
+credstash
+

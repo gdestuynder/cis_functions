@@ -1,7 +1,7 @@
 """ Mozilla Change Integration Service Validator.
 
 This lambda function is invoked by a change integration service producer like
-Mozillian's.
+mozillians.org.
 
 Call:  synchronously using boto3('lambda') client.
 Takes: an event containing a user profile
@@ -51,7 +51,7 @@ def wrapper():
     """
 
     event_file = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)), 'event.json'
+        os.path.abspath(os.path.dirname(__file__)), 'event-krug.json'
     )
 
     with open(event_file, 'r') as event_data:

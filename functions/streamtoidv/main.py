@@ -5,13 +5,15 @@ import utils
 
 from cis import validation, encryption
 
+
 def handle(event, context):
 
     # Initialize Stream Logger
     # Log level can be environment driven later in development.
     log_level = logging.INFO
     utils.set_stream_logger(level=log_level)
-    logger = logging.getLogger('cis-validator')
+    logger = logging.getLogger('cis-streamtoidv')
+
     logger.info("Stream Processor initialized.")
 
     for record in event['Records']:
@@ -46,11 +48,7 @@ def handle(event, context):
                 status=res
             )
         )
-
-
-        # To do scan the vault for this object.  If a version exists log.
-        # Alternatively this could go to some sort of version table.
-
+        
     logger.info(
         'Successfully processed {} records.'.format(len(event['Records']))
     )

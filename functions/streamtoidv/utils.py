@@ -26,6 +26,7 @@ SOFTWARE.
 
 """
 
+
 def set_stream_logger(name="cis-streamtoidv", level=logging.INFO, format_string=None):
     """
     :Stream logger class borrowed from https://github.com/threatresponse/aws_ir
@@ -44,5 +45,5 @@ def set_stream_logger(name="cis-streamtoidv", level=logging.INFO, format_string=
     streamHandler.setFormatter(streamFormatter)
     logger.addHandler(streamHandler)
 
-logging.getLogger('cis-streamtoidv').addHandler(logging.NullHandler())
 
+logging.getLogger('cis-streamtoidv').addHandler(logging.NullHandler())

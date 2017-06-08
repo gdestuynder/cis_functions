@@ -1,4 +1,3 @@
-import os
 import logging
 
 """
@@ -44,5 +43,6 @@ def set_stream_logger(name="cis-validator", level=logging.INFO, format_string=No
     streamFormatter = logging.Formatter(format_string, time_format)
     streamHandler.setFormatter(streamFormatter)
     logger.addHandler(streamHandler)
+
 
 logging.getLogger('cis-validator').addHandler(logging.NullHandler())

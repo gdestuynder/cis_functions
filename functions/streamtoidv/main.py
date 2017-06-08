@@ -48,7 +48,7 @@ def handle(event, context):
                 status=res
             )
         )
-        
+
     logger.info(
         'Successfully processed {} records.'.format(len(event['Records']))
     )

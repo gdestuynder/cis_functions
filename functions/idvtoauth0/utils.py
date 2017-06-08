@@ -44,4 +44,5 @@ def set_stream_logger(name="cis-idvtoauth0", level=logging.INFO, format_string=N
     streamHandler.setFormatter(streamFormatter)
     logger.addHandler(streamHandler)
 
+
 logging.getLogger('cis-idvtoauth0').addHandler(logging.NullHandler())

@@ -7,7 +7,7 @@
 # Contributors: Guillaume Destuynder <kang@mozilla.com>
 
 
-## Auth0 setup
+# Auth0 setup
 # Required client: non-interactive Auth0 client
 # Required Auth0 API Scopes
 # create:users (for users Auth0 does not yet know about)
@@ -22,11 +22,11 @@
 # you do)
 
 import http.client
-import sys
 import json
 import time
 import logging
 import utils
+
 
 class DotDict(dict):
     """
@@ -42,9 +42,12 @@ class DotDict(dict):
                 value = DotDict(value)
             self[key] = value
 
+
 class CISAuthZero():
     def __init__(self, config):
-        self.default_headers = { 'content-type': "application/json" }
+        self.default_headers = {
+            'content-type': "application/json"
+        }
         self.uri = config.uri
         self.client_id = config.client_id
         self.client_secret = config.client_secret
@@ -67,7 +70,7 @@ class CISAuthZero():
         new_profile: dict (can be a JSON string loaded with json.loads(str) for example)
 
         Update a user in auth0 and return it as a dict to the caller.
-        Auth0 API doc: https://manage-dev.mozilla.auth0.com/docs/api/management/v2#!/Users/patch_users_by_id
+        Auth0 API doc: https://auth0.com/docs/api/management/v2
         Auth0 API endpoint: PATCH /api/v2/users/{id}
         Auth0 API parameters: id (user_id, required), body (required)
         """
@@ -82,7 +85,10 @@ class CISAuthZero():
         # This validates the JSON as well
         payload_json = json.dumps(payload)
 
-        self.conn.request("PATCH", "/api/v2/users/{}".format(user_id), payload_json, self._authorize(self.default_headers))
+        self.conn.request("PATCH",
+                          "/api/v2/users/{}".format(user_id),
+                          payload_json,
+                          self._authorize(self.default_headers))
         res = self.conn.getresponse()
         self._check_http_response(res)
         user = DotDict(json.loads(res.read()))

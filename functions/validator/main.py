@@ -10,14 +10,13 @@ Does:  validate the user profile against the json schema for Mozilla users.
 If the profile passes store it in kinesis for processing.
 
 """
-import base64
-import json
 import logging
 import os
 import utils
 
 # Import the Mozilla CIS library to facilitate core logic interaction.
 from cis import encryption, streams, validation
+
 
 def handle(event, context):
     """This is the main handler called during function invocation."""
@@ -41,6 +40,7 @@ def handle(event, context):
 
         # To-Do Raise Exception back to invoking party.
 
+
 def wrapper():
     """Helper for easily calling this from a command line locally.
     Example: `python -c 'import main; main.wrapper()' | jq '.'`
@@ -58,4 +58,4 @@ def wrapper():
         event = (event_data.read().encode('utf-8'))
 
     event = encryption.encrypt(event)
-    res = handle(event, None)
+    handle(event, None)

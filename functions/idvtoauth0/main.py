@@ -2,13 +2,14 @@
 import authzero
 import boto3
 import credstash
-import json
 import logging
 import os
 import utils
 
+from botocore.exceptions import ClientError
 
-"""Find user function should move to CIS core."""
+
+# TODO: function should move to CIS core.
 def find_user(user_id):
     table_name = os.getenv('CIS_DYNAMODB_TABLE', None)
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
@@ -18,11 +19,11 @@ def find_user(user_id):
             Key={
                 'user_id': user_id
             }
-
         )
         return res.get('Item', None)
-    except ResourceNotFoundException as ex:
+    except ClientError:
         return None
+
 
 def handle(event, context):
 
@@ -54,7 +55,7 @@ def handle(event, context):
     )
 
     client = authzero.CISAuthZero(config)
-    access_token = client.get_access_token()
+    client.get_access_token()
 
     for record in event['Records']:
         # Kinesis data is base64 encoded so decode here

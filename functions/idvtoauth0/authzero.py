@@ -13,6 +13,7 @@
 # create:users (for users Auth0 does not yet know about)
 # update:user_app_metadata (this is where the CIS data is stored)
 # create:user_app_metadata (same reason)
+# read:users (to read the original user data for [re]integration purposes)
 #
 # NOTE: we're not using update:users because it is not possible to update
 # the attributes we care about directly. Instead we load the attributes we
@@ -63,6 +64,23 @@ class CISAuthZero():
     def __del__(self):
         self.client_secret = None
         self.conn.close()
+
+    def get_user(self, user_id):
+        """
+        user_id: string
+        returns: JSON dict of the user profile
+        """
+
+        payload = DotDict(dict())
+        payload_json = json.dumps(payload)
+        self.conn.request("GET",
+                          "/api/v2/users/{}".format(user_id),
+                          payload_json,
+                          self._authorize(self.default_headers))
+        res = self.conn.getresponse()
+        self._check_http_response(res)
+        user = DotDict(json.loads(res.read()))
+        return user
 
     def update_user(self, user_id, new_profile):
         """

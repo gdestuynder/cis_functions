@@ -28,10 +28,11 @@ aws_secret_access_key = YOUR_LONGTERM_ACCESS_KEY
 
 I set up a bash alias for convenience after this that looks like:
 
+```
+alias idaws="aws-mfa --device <mfa-arn> --assume-role <iam-role> --role-session-name <session-name>
+```
 
-alias idaws="/Users/akrug/Library/Python/2.7/bin/aws-mfa --device arn:aws:iam::371522382791:mfa/akrug --assume-role arn:aws:iam::656532927350:role/CISDeveloper --role-session-name \"andrew-mac\""
-
-> Note this should work for any parsys infra account user with MFA.  
+> Note this should work for any parsys infra account user with MFA.
 
 My credentials generated in this manner are good for 60-minutes.  I could set up additional aliases for additional profiles if necessary.
 
@@ -56,11 +57,10 @@ See the container project for the reasons why you'd want to use the container in
 
 `docker run --rm -ti -v ~/.aws:/root/.aws -v ~/workspace/cis_functions/:/workspace mozillaiam/docker-apex:latest /bin/bash`
 
-2. Do business as usual.  
+2. Do business as usual.
 
 # CI/CD pipelines
 
 1. Commits to master branch automatically run `apex deploy -e stage`
 
 > This environment is a fully self contained version of the vault, stream, and dynamo.  However users should note that it still updates manage-dev instance of auth0.
- 

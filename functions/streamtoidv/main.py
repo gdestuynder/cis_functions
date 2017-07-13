@@ -4,6 +4,7 @@ import logging
 import utils
 
 from cis import validation, encryption
+import cisfilter
 
 
 def handle(event, context):
@@ -15,6 +16,7 @@ def handle(event, context):
     logger = logging.getLogger('cis-streamtoidv')
 
     logger.info("Stream Processor initialized.")
+    print(event)
 
     for record in event['Records']:
         # Kinesis data is base64 encoded so decode here
@@ -38,10 +40,17 @@ def handle(event, context):
             )
         )
 
-        logger.info("Payload decrypted.  Attempting storage in the vault.")
+        logger.info("Payload decrypted.")
+
+        # Load all of our filter and rules
+        filered_payload = cisfilter.mozilliansorg(decrypted_payload)
+
+        logger.info("Payload filtered.")
+
+        logger.info("Attempting payloadstorage in the vault.")
 
         # Store the result of the event in the identity vault
-        res = validation.store_to_vault(decrypted_payload)
+        res = validation.store_to_vault(filtered_payload)
 
         logger.info(
             "Vault storage status is {status}".format(

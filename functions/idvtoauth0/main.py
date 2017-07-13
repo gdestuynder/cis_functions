@@ -70,6 +70,12 @@ def handle(event, context):
         logger.info("Status of profile search is {s}".format(s=profile))
 
         if profile is not None:
+            # Profile whitelisting. This allows to select which user profiles are
+            # to be integrated using CIS, mainly for transitioning purposes.
+            # See also: https://mozillians.org/en-US/group/cis_whitelist
+            if 'mozilliansorg_cis_whitelist' not in profile['groups']:
+                continue
+
             # XXX Force-integrate LDAP groups as these are synchronized
             # from LDAP to Auth0 directly.
             # This is to be removed when LDAP feeds CIS.

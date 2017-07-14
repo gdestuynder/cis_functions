@@ -21,7 +21,7 @@ https://github.com/mozilla-iam/cis/issues
 static access keys that give you the ability to assume_role.
 
 ```
-[defult-long-term]
+[default-long-term]
 aws_access_key_id = YOUR_LONGTERM_KEY_ID
 aws_secret_access_key = YOUR_LONGTERM_ACCESS_KEY
 ```
@@ -64,3 +64,23 @@ See the container project for the reasons why you'd want to use the container in
 1. Commits to master branch automatically run `apex deploy -e stage`
 
 > This environment is a fully self contained version of the vault, stream, and dynamo.  However users should note that it still updates manage-dev instance of auth0.
+
+# Testing
+
+The validator has a `wrapper()` function that can be used to mock an event going into CIS. You can use it as such:
+
+```
+# Export configuration variables for your environment - you can also find then in 'functions.{stage,dev,prod,...}.json'
+# (This is the key identifier, not the actual key)
+$ export CIS_ARN_MASTER_KEY=arn:aws:kms:us-west-2:656532927350:key/9e231aa0-04e4-4517-a45d-633c3bb055f0
+$ export CIS_KINESIS_STREAM_ARN=arn:aws:kinesis:us-west-2:656532927350:stream/CISStaging-VaultandStreams-CISInputStream-P7DYU9FBQ2OW
+# Ensure you have cis installed or copied somewhere python can find it, along it's dependencies.
+# By default the mocked event is 'event-krug.json'
+$ cd functions/validator
+$ python -c 'import main; main.wrapper()' | jq '.'
+2017-07-14T12:57:04 - cis-validator - INFO - Validator successfully initialized.
+2017-07-14T12:57:04 - cis-validator - INFO - Payload is valid sending to kinesis.
+
+```
+
+This will also use kinesis so ensure your AWS setup is functional (see "deployment" above).

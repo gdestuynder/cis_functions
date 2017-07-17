@@ -12,17 +12,23 @@ If the profile passes store it in kinesis for processing.
 """
 import base64
 import logging
-import os
-import utils
 
 # Import the Mozilla CIS library to facilitate core logic interaction.
 from cis import encryption
 from cis import streams
 from cis import validation
-
+from cis import utils
 
 def handle(event, context):
     """This is the main handler called during function invocation."""
+
+    sl = utils.StructuredLogger(
+        name='cis-validator',
+        level=logging.INFO
+    )
+
+    logger = logging.getLogger('cis-validator')
+
     payload = {}
     payload['ciphertext'] = base64.b64decode(event['ciphertext'])
     payload['tag'] = base64.b64decode(event['tag'])
@@ -35,9 +41,7 @@ def handle(event, context):
 
     # Initialize Stream Logger
     # Log level can be environment driven later in development.
-    log_level = logging.INFO
-    utils.set_stream_logger(level=log_level)
-    logger = logging.getLogger('cis-validator')
+
     logger.info("Validator successfully initialized.")
 
     payload_status = validation.validate(**payload)

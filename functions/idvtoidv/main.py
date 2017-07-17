@@ -1,13 +1,16 @@
 import logging
-import utils
+from cis import utils
 
 
 def handle(event, context):
 
+    sl = utils.StructuredLogger(
+        name='cis-idvtoidv',
+        level=logging.INFO
+    )
+
     # Initialize Stream Logger
     # Log level can be environment driven later in development.
-    log_level = logging.INFO
-    utils.set_stream_logger(level=log_level)
     logger = logging.getLogger('cis-idvtoidv')
     logger.info("Stream Processor initialized.")
 

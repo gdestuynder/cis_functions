@@ -4,8 +4,8 @@ import boto3
 import credstash
 import logging
 import os
-import utils
 
+from cis import utils
 from botocore.exceptions import ClientError
 
 
@@ -26,11 +26,11 @@ def find_user(user_id):
 
 
 def handle(event, context):
+    sl = utils.StructuredLogger(
+        name='cis-idvtoauth0',
+        level=logging.INFO
+    )
 
-    # Initialize Stream Logger
-    # Log level can be environment driven later in development.
-    log_level = logging.INFO
-    utils.set_stream_logger(level=log_level)
     logger = logging.getLogger('cis-idvtoauth0')
     logger.info("Stream Processor initialized.")
 

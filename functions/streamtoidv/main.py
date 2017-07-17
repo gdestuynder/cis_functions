@@ -1,17 +1,18 @@
 import base64
 import json
 import logging
-import utils
 
-from cis import validation, encryption
+from cis import encryption
+from cis import validation
+from cis import utils
 
 
 def handle(event, context):
+    sl = utils.StructuredLogger(
+        name='cis-streamtoidv',
+        level=logging.INFO
+    )
 
-    # Initialize Stream Logger
-    # Log level can be environment driven later in development.
-    log_level = logging.INFO
-    utils.set_stream_logger(level=log_level)
     logger = logging.getLogger('cis-streamtoidv')
 
     logger.info("Stream Processor initialized.")

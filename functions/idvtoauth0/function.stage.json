@@ -9,7 +9,7 @@
     "CIS_KINESIS_STREAM_ARN": "arn:aws:kinesis:us-west-2:656532927350:stream/CISStaging-VaultandStreams-CISInputStream-P7DYU9FBQ2OW"
   },
   "hooks":{
-    "build": "pip3 install -r requirements.txt -t .",
+    "build": "pip3 install -r ../../requirements.txt -t .",
     "clean": "/bin/bash clean.sh"
   }
 }

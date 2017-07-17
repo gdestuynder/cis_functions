@@ -6,10 +6,11 @@
   "environment": {
     "CIS_ARN_MASTER_KEY": "arn:aws:kms:us-west-2:656532927350:key/9e231aa0-04e4-4517-a45d-633c3bb055f0",
     "CIS_DYNAMODB_TABLE": "CISStreamandDB-IdentityVaultUsers-AQ358T5XZNSQ",
-    "CIS_KINESIS_STREAM_ARN": "arn:aws:kinesis:us-west-2:656532927350:stream/CISStreamandDB-CISInputStream-1FTGC3KE4NN9U"
+    "CIS_KINESIS_STREAM_ARN": "arn:aws:kinesis:us-west-2:656532927350:stream/CISStreamandDB-CISInputStream-1FTGC3KE4NN9U",
+    "CIS_LAMBDA_VALIDATOR_ARN": "arn:aws:lambda:us-west-2:656532927350:function:cis_functions_validator"
   },
   "hooks":{
-    "build": "pip3 install -r requirements.txt -t .",
+    "build": "pip3 install -r ../../requirements.txt -t .",
     "clean": "/bin/bash clean.sh"
   }
 }

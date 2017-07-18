@@ -44,7 +44,7 @@ def handle(event, context):
 
     logger.info("Validator successfully initialized.")
 
-    payload_status = validation.validate(**payload)
+    payload_status = validation.validate(publisher, **payload)
 
     if payload_status is True:
         logger.info("Payload is valid sending to kinesis.")

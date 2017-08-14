@@ -5,11 +5,11 @@ import credstash
 import logging
 import os
 
-from cis import utils
+
 from botocore.exceptions import ClientError
+from cis.libs import utils
 
 
-# TODO: function should move to CIS core.
 def find_user(user_id):
     table_name = os.getenv('CIS_DYNAMODB_TABLE', None)
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
@@ -26,7 +26,7 @@ def find_user(user_id):
 
 
 def handle(event, context):
-    sl = utils.StructuredLogger(
+    utils.StructuredLogger(
         name='cis-idvtoauth0',
         level=logging.INFO
     )
@@ -34,24 +34,32 @@ def handle(event, context):
     logger = logging.getLogger('cis-idvtoauth0')
     logger.info("Stream Processor initialized.")
 
+    environment = os.getenv('ENVIRONMENT', 'dev')
+
+    if environment == 'production':
+        environment = 'prod'
+    else:
+        logger.info('Development stage recognized.  Applying to credstash.')
+        environment = 'dev'
+
     # New up the config object for CISAuthZero
     config = authzero.DotDict(dict())
     config.client_id = credstash.getSecret(
         name="cis.client_id",
-        context={'app': 'cis', 'environment': 'dev'},
-        region="us-east-1"
+        context={'app': 'cis', 'environment': environment},
+        region="us-west-2"
     )
 
     config.client_secret = credstash.getSecret(
         name="cis.client_secret",
-        context={'app': 'cis', 'environment': 'dev'},
-        region="us-east-1"
+        context={'app': 'cis', 'environment': environment},
+        region="us-west-2"
     )
 
     config.uri = credstash.getSecret(
         name="cis.uri",
-        context={'app': 'cis', 'environment': 'dev'},
-        region="us-east-1"
+        context={'app': 'cis', 'environment': environment},
+        region="us-west-2"
     )
 
     client = authzero.CISAuthZero(config)

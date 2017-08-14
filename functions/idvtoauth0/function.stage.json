@@ -6,7 +6,8 @@
   "environment": {
     "CIS_ARN_MASTER_KEY": "arn:aws:kms:us-west-2:656532927350:key/9e231aa0-04e4-4517-a45d-633c3bb055f0",
     "CIS_DYNAMODB_TABLE": "CISStaging-VaultandStreams-IdentityVaultUsers-O35P6M8U9LNW",
-    "CIS_KINESIS_STREAM_ARN": "arn:aws:kinesis:us-west-2:656532927350:stream/CISStaging-VaultandStreams-CISInputStream-P7DYU9FBQ2OW"
+    "CIS_KINESIS_STREAM_ARN": "arn:aws:kinesis:us-west-2:656532927350:stream/CISStaging-VaultandStreams-CISInputStream-P7DYU9FBQ2OW",
+    "CIS_KINESIS_STREAM_NAME": "CISStaging-VaultandStreams-CISInputStream-P7DYU9FBQ2OW"
   },
   "hooks":{
     "build": "pip3 install -r ../../requirements.txt -t .",

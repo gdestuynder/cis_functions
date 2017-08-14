@@ -24,15 +24,16 @@
 
 import http.client
 import json
-import time
 import logging
-import utils
+import time
+
+
+from cis.libs import utils
 
 
 class DotDict(dict):
-    """
-    returns a dict.item notation for dict()'s
-    """
+    """return a dict.item notation for dict()'s"""
+
     __getattr__ = dict.__getitem__
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
@@ -44,7 +45,7 @@ class DotDict(dict):
             self[key] = value
 
 
-class CISAuthZero():
+class CISAuthZero(object):
     def __init__(self, config):
         self.default_headers = {
             'content-type': "application/json"
@@ -57,8 +58,11 @@ class CISAuthZero():
         self.access_token_valid_until = 0
         self.conn = http.client.HTTPSConnection(config.uri)
 
-        log_level = logging.INFO
-        utils.set_stream_logger(level=log_level)
+        utils.StructuredLogger(
+            name='cis-idvtoauth0',
+            level=logging.INFO
+        )
+
         self.logger = logging.getLogger('CISAuthZero')
 
     def __del__(self):
@@ -66,7 +70,7 @@ class CISAuthZero():
         self.conn.close()
 
     def get_user(self, user_id):
-        """
+        """Return user from the auth0 API.
         user_id: string
         returns: JSON dict of the user profile
         """

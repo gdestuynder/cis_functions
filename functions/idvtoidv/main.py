@@ -1,10 +1,11 @@
 import logging
-from cis import utils
+
+from cis.libs import utils
 
 
 def handle(event, context):
 
-    sl = utils.StructuredLogger(
+    utils.StructuredLogger(
         name='cis-idvtoidv',
         level=logging.INFO
     )

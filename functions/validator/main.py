@@ -11,53 +11,36 @@ If the profile passes store it in kinesis for processing.
 
 """
 import base64
+import boto3
+import json
 import logging
 
 # Import the Mozilla CIS library to facilitate core logic interaction.
-from cis import encryption
-from cis import streams
-from cis import validation
-from cis import utils
+from cis.libs import utils
+from cis import processor
+
 
 def handle(event, context):
     """This is the main handler called during function invocation."""
 
-    sl = utils.StructuredLogger(
+    utils.StructuredLogger(
         name='cis-validator',
         level=logging.INFO
     )
 
     logger = logging.getLogger('cis-validator')
 
-    payload = {}
-    payload['ciphertext'] = base64.b64decode(event['ciphertext'])
-    payload['tag'] = base64.b64decode(event['tag'])
-    payload['ciphertext_key'] = base64.b64decode(event['ciphertext_key'])
-    payload['iv'] = base64.b64decode(event['iv'])
+    encrypted_profile_data = json.loads(base64.b64decode(event.get('profile')))
 
-    # Require publisher to add partition key in event
-    publisher = str(base64.b64decode(event.get('publisher').decode('utf-8')))
+    p = processor.ValidatorOperation(
+        boto_session=boto3.Session(region_name='us-west-2'),
+        publisher=event.get('publisher'),
+        signature=event.get('signature'),
+        encrypted_profile_data=encrypted_profile_data
+    )
 
+    result = p.run()
 
-    # Initialize Stream Logger
-    # Log level can be environment driven later in development.
+    logger.info('The result of the change operation was {r}'.format(r=result))
 
-    logger.info("Validator successfully initialized.")
-
-    payload_status = validation.validate(publisher, **payload)
-
-    if payload_status is True:
-        logger.info("Payload is valid sending to kinesis.")
-
-        decrypted_profile = encryption.decrypt(**payload)
-
-        res = streams.publish_to_cis(
-            data=decrypted_profile,
-            partition_key=publisher
-        )
-
-        return True
-    else:
-        logger.info("Payload is invalid rejecting payload.")
-        return False
-
+    return result

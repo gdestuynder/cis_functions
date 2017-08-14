@@ -5,7 +5,6 @@ s3transfer==0.1.10
 python-decouple==3.0
 asn1crypto==0.22.0
 cffi==1.10.0
-cryptography==1.8.1
 idna==2.5
 pycparser==2.17
 jsonschema==2.6.0
@@ -14,4 +13,7 @@ packaging==16.8
 setuptools==35.0.2
 appdirs==1.4.3
 pyparsing==2.2.0
+pluginbase==0.5
+everett==0.9
+credstash==1.13.2
 git+git://github.com/mozilla-iam/cis.git

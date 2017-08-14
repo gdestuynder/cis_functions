@@ -9,15 +9,15 @@
 #####################################
 
 
-region="us-east-1"
+region="us-west-2"
 
 #Update the role here
-role="CIS-Staging-Roles-IDVtoIDMDriver-1UOEZCZI1TOVR"
-export AWS_DEFAULT_REGION="us-east-1"
+role="cis-prod-roles-IDVtoIDMDriver-1RCFMGZADHHFK"
+export AWS_DEFAULT_REGION="us-west-2"
 
 #Grant command
 credstash_key_id="`aws --region $region kms list-aliases --query "Aliases[?AliasName=='alias/credstash'].TargetKeyId | [0]" --output text`"
 role_arn="`aws iam get-role --role-name $role --query Role.Arn --output text`"
-constraints="EncryptionContextEquals={app=cis,environment=dev}"
+constraints="EncryptionContextEquals={app=cis,environment=prod}"
 
 aws kms create-grant --key-id $credstash_key_id --grantee-principal $role_arn --operations "Decrypt" --constraints $constraints --name idv-to-idm

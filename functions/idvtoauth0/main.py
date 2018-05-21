@@ -95,7 +95,7 @@ def handle(event, context):
             logger.info('A profile has been located for user: {}'.format(user_id))
 
         if profile is not None:
-            logger.info('Attemtping to reintegrate profile for user: {}'.format(user_id))
+            logger.info('Attempting to reintegrate profile for user: {}'.format(user_id))
             logger.debug('-------------------Pre-Integration---------------------------')
             logger.debug(json.dumps(profile))
             logger.debug('------------------------End----------------------------------')

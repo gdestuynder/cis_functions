@@ -11,7 +11,8 @@
     "ENVIRONMENT": "production",
     "CIS_LOGGING_OUTPUT": "cloudwatch",
     "CIS_CLOUDWATCH_LOG_GROUP": "staging",
-    "CIS_LOGGING_LEVEL": "DEBUG"
+    "CIS_LOGGING_LEVEL": "DEBUG",
+    "IAM_ACCESS_RULES_URL": "https://cdn.sso.mozilla.com/apps.yml"
   },
   "hooks":{
     "build": "pip3 install -r ../../requirements-prod.txt -t .",

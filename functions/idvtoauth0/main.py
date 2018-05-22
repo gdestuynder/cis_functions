@@ -8,6 +8,7 @@ import boto3
 import credstash
 import json
 import os
+import yaml
 import re
 
 from botocore.exceptions import ClientError
@@ -35,12 +36,16 @@ def find_user(user_id):
         if profile and profile['groups'] == 'NULL':
             profile['groups'] = []
 
+        if profile and profile.get('authoritativeGroups') and profile['authoritativeGroups'] == 'NULL':
+            profile['authoritativeGroups'] = []
+
         return profile
     except ClientError:
         return None
 
 
 def handle(event, context):
+    os.environ['TZ'] = 'UTC' # Default to UTC for all timestamps
     config = get_config()
     custom_logger = utils.CISLogger(
         name=__name__,
@@ -108,8 +113,61 @@ def handle(event, context):
                 else:
                     compatible_group_list.append(group)
 
+
+            # Fetch auth0 profile
+            aprofile = client.get_user(user_id)
+            aprofile_groups = aprofile['app_metadata'].get('authoritativeGroups')
+            # What's in our new groups that arent in auth0?
+            new_groups = set(compatible_group_list) - set(aprofile_groups)
+
+            logger.info('Retrieved auth0 user: {}'.format(user_id))
+            logger.debug('-------------------Auth0-Response----------------------------')
+            logger.debug(json.dumps(aprofile))
+            logger.debug('New groups to add to auth0: {}'.format(new_groups))
+            logger.debug('------------------------End----------------------------------')
+
+            ## Bootstrap expiration of access (authoritativeGroups) where needed
+            logger.info('Start authoritativeGroups bootstrapping for user: {}'.format(user_id))
+            logger.debug('-----------Bootstrapping authoritativeGroups-----------------')
+            authoritativeGroups = profile.get('authoritativeGroups')
+            # Fetch apps.yml access information data
+            # XXX Should this be cached?
+            access_rules_url = os.getenv('IAM_ACCESS_RULES_URL')
+            r = requests.get(access_rules_url)
+            if not r.ok:
+                logger.warning('Failed to fetch access rules: url: {}, reason: {}, code: {}, body: {}'
+                             .format(r.url, r.reason, r.status_code, r.text))
+                logger.warning('No expiration stamp will be set for user: {} (failing closed)'.format(user_id))
+            else:
+                try:
+                    access_rules = yaml.load(r.text)
+                except Exception as e:
+                    logger.warning('Failed to parse the access rules, no expiration stamp will be set for user: {}, '
+                                   'exception: {} (failing closed)'.format(user_id, e))
+                else:
+                    # Do we have an expiration of access authoritativeGroups for our RPs?
+                    for rule in access_rules.get('apps'):
+                        if rule['application'] get('expire_access_when_unused_after') is not None:
+                            # Does the user profile on auth0 already have this group implemented?
+                            afound = False # Records if we found a match
+                            for existing_agroup in profile['authoritativeGroups']:
+                                if rule['application'].get('client_id') == existing_agroup.get('uuid'):
+                                    logger.debug('User {} already have a timestamp set for client_id {}, skipping'
+                                                 .format(user_id, existing_agroup.get('uuid')))
+                                    afound = True
+                                    break
+                            # No match, so the user has no authoritativeGroups timestamp for this RP, but the RP uses
+                            # expiration of access. We add it here so that we know of when the access has been first
+                            # given to the user, even if the user never logs in to the RP. This line is the whole reason
+                            # all this code is there. The timestamp is in "js" format.
+                            if not afound:
+                                authoritativeGroups.append({'lastUsed': time.strftime('%Y-%m-%dT%H:%M:%S.000Z'),
+                                                            'uuid': rule['application'].get('client_id'}
+                                                          )
+            logger.debug('------------------------End----------------------------------')
+
             # Update groups only in Auth0
-            profile_groups = {'groups': compatible_group_list}
+            profile_update = {'groups': compatible_group_list, 'authoritativeGroups': authoritativeGroups}
 
             res = client.update_user(user_id, profile_groups)
             logger.info('Updating user group information in auth0 for {}'.format(user_id))
